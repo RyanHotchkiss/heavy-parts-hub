@@ -15,7 +15,11 @@ export async function POST(req) {
 
     const partUrl = `${baseUrl}/${capitalize(make)}-parts/${titleCaseSlug(model)}/${part.toLowerCase()}/?${queryParams}`;
     // 2. Fetch the HTML
-    const html = await fetch(partUrl).then(res => res.text());
+    const html = await fetch(partUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/113.0.0.0 Safari/537.36',
+      },
+    }).then(res => res.text());
     const $ = cheerio.load(html);
 
     // 3. Scrape first 3 products
