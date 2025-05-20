@@ -15,11 +15,15 @@ export async function POST(req) {
 
     const partUrl = `${baseUrl}/${capitalize(make)}-parts/${titleCaseSlug(model)}/${part.toLowerCase()}/?${queryParams}`;
     // 2. Fetch the HTML
-    const html = await fetch(partUrl, {
+    const res = await fetch(partUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/113.0.0.0 Safari/537.36',
       },
-    }).then(res => res.text());
+    });
+    const html = await res.text();
+    
+    // Return first 1000 characters of HTML for inspection
+    return NextResponse.json({ debug: html.slice(0, 1000) });
     const $ = cheerio.load(html);
 
     // 3. Scrape first 3 products
